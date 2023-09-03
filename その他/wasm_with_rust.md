@@ -14,6 +14,8 @@ rustのコードは書かれていない。
 `cargo generate --git https://github.com/rustwasm/wasm-pack-template`で実行される
 RustライブラリをWebAssemblyにコンパイルし、生成されたパッケージをnpmに公開するためのテンプレートです。
 WebAssemblyにコンパイルしてnpmパッケージとして公開できるRustライブラリを作成するために設計されています。
+
+viteとかで使うときはそのプロジェクトの中でこれを実行すればrustのコードからwasmをビルド出来る。
 ## rust-webpack-template
 Rustで生成されたWebAssemblyとWebpackを使ってmonorepoスタイルのWebアプリケーションを作成するためのテンプレートです。
 Rustで生成したWebAssemblyとWebpackを使ってWebアプリケーションを作成するプロジェクトを作成するためのものです。 
