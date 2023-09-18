@@ -20,3 +20,7 @@ viteとかで使うときはそのプロジェクトの中でこれを実行す�
 Rustで生成されたWebAssemblyとWebpackを使ってmonorepoスタイルのWebアプリケーションを作成するためのテンプレートです。
 Rustで生成したWebAssemblyとWebpackを使ってWebアプリケーションを作成するプロジェクトを作成するためのものです。 
 最初からrustのコードが含まれている
+
+これだと最初からrustのコードとjavascriptのコードが含まれている。  
+wasm-packのチュートリアルで使った。  
+`npm init rust-webpack <project-name>`で実行される。
