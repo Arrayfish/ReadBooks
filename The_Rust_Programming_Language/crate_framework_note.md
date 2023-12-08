@@ -31,3 +31,9 @@ actix_web::Appの.wrap()に入れて使う。ミドルウェア？
 - sqlxを使用している。
 - cliでテーブル定義からmodel(エンティティ)を生成できる
 - cliでActiveレコードのようにテーブルに対応するモデル毎にメソッドが自動で提供される。
+
+### ActiveModel
+ActiveValueをプロパティに持つモデル。
+ActiveValueにはNotSet, Unchanged(val), Set(val)の3つの種類がある。
+save()ではprimarykeyがNotSetの場合にはINSERTに、それ以外の場合はUPDATEになる。
+update()ではSetのものしか更新しないので、reset()などで強制的にSetにする必要がある。
