@@ -1,10 +1,34 @@
 # Rustのフレームワークやクレートに関するメモ
 
-## actix_webフレームワーク
+## [actix_webフレームワーク](https://actix.rs/)
 
 rustでwebアプリケーションを作成する時に使用する。
 似たようなフレームワークにaxumがある。
 actixというアクターモデル？のフレームワーク上に構成されていたが、現在ではほぼ別物になっている。
+
+### [middleware](https://actix.rs/docs/middleware)
+
+#### actix_session
+
+セッション管理をする。したのactix_identityで使用する
+ユーザについて色々な情報を保持することができる？
+
+### [actix-extras](https://github.com/actix/actix-extras#readme)
+
+actix_webをサポートするクレート群
+
+#### actix-identity
+
+ログイン管理をしてくれる
+actix-sessionの上に構築されている
+あくまでログイン管理だけなので、認証部分は自分で作成する必要がある。
+
+## ユーザ認証に使えそうなクレート
+
+### librauth
+
+### この[サイト](https://blog.logrocket.com/9-rust-authentication-libraries-that-are-ready-for-production/)
+複数のサイトが載っているが、2020年のサイトなのでちゃんと自分でも調べる
 
 ## tracing クレート
 
