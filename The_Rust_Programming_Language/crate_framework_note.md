@@ -1,5 +1,10 @@
 # Rustのフレームワークやクレートに関するメモ
 
+## [lib.rs](https://lib.rs/)
+
+様々な種類のクレートを紹介するサイト  
+カテゴリごとの検索や、人気のクレートなどが見れる。
+
 ## [actix_webフレームワーク](https://actix.rs/)
 
 rustでwebアプリケーションを作成する時に使用する。
@@ -29,6 +34,9 @@ actix-sessionの上に構築されている
 
 ### この[サイト](https://blog.logrocket.com/9-rust-authentication-libraries-that-are-ready-for-production/)
 複数のサイトが載っているが、2020年のサイトなのでちゃんと自分でも調べる
+
+## jsonwebtoken
+lib.rsで一番上に出てきた。調べ中
 
 ## tracing クレート
 
