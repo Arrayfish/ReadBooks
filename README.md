@@ -1,7 +1,6 @@
 # ReadBooks
 
-読んだ本の感想やコードなど  
-内容は書かない  
+読んだ本、ネットの感想やコードなど   
 
 ## ルール
 
@@ -15,3 +14,5 @@
 - [数理最適化と機械学習の融合アプローチ-分類と新しい枠組みと応用- ](https://speakerdeck.com/mickey_kubo/shu-li-zui-shi-hua-toji-jie-xue-xi-no-rong-he-apuroti-fen-lei-toxin-siiwaku-zu-mitoying-yong?slide=4)
 - [The Twelve-Factor App](https://12factor.net/ja/): 一通り目を通したが、メモを書いていいない
 - [[Rust] Rustでアプリケーションを書くときのアーキテクチャなどについて考える-その１（アーキテクチャ、Domain、Usecase編](https://zenn.dev/lecto/articles/b113dbe3d0662f)
+- [chibivue](https://ubugeeei.github.io/chibivue/)  
+  Vueを作って学ぶみたいなもの
