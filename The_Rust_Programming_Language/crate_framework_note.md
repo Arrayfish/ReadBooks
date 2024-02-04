@@ -13,6 +13,10 @@ actixというアクターモデル？のフレームワーク上に構成され
 
 ### [middleware](https://actix.rs/docs/middleware)
 
+登録順とは逆の順番で実行される。  
+Service traitとTransform traitを実装することで作成できる。  
+公式サイトのサンプルコードのService traitのなかだけいじればよさそう
+
 #### actix_session
 
 セッション管理をする。したのactix_identityで使用する
