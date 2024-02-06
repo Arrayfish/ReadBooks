@@ -5,33 +5,6 @@
 様々な種類のクレートを紹介するサイト  
 カテゴリごとの検索や、人気のクレートなどが見れる。
 
-## [actix_webフレームワーク](https://actix.rs/)
-
-rustでwebアプリケーションを作成する時に使用する。
-似たようなフレームワークにaxumがある。
-actixというアクターモデル？のフレームワーク上に構成されていたが、現在ではほぼ別物になっている。
-
-### [middleware](https://actix.rs/docs/middleware)
-
-登録順とは逆の順番で実行される。  
-Service traitとTransform traitを実装することで作成できる。  
-公式サイトのサンプルコードのService traitのなかだけいじればよさそう
-
-#### actix_session
-
-セッション管理をする。したのactix_identityで使用する
-ユーザについて色々な情報を保持することができる？
-
-### [actix-extras](https://github.com/actix/actix-extras#readme)
-
-actix_webをサポートするクレート群
-
-#### actix-identity
-
-ログイン管理をしてくれる
-actix-sessionの上に構築されている
-あくまでログイン管理だけなので、認証部分は自分で作成する必要がある。
-
 ## ユーザ認証に使えそうなクレート
 
 ### librauth

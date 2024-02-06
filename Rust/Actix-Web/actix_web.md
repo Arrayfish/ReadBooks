@@ -1,0 +1,22 @@
+# [actix_webフレームワーク](https://actix.rs/)
+
+rustでwebアプリケーションを作成する時に使用する。
+似たようなフレームワークにaxumがある。
+actixというアクターモデル？のフレームワーク上に構成されていたが、現在ではほぼ別物になっている。
+
+## middlewares
+
+### actix_session
+
+セッション管理をする。したのactix_identityで使用する
+ユーザについて色々な情報を保持することができる？
+
+### [actix-extras](https://github.com/actix/actix-extras#readme)
+
+actix_webをサポートするクレート群
+
+### actix-identity
+
+ログイン管理をしてくれる
+actix-sessionの上に構築されている
+あくまでログイン管理だけなので、認証部分は自分で作成する必要がある。
