@@ -20,3 +20,22 @@ actix_webをサポートするクレート群
 ログイン管理をしてくれる
 actix-sessionの上に構築されている
 あくまでログイン管理だけなので、認証部分は自分で作成する必要がある。
+
+## app_data()
+
+アプリケーション全体で共有するデータを設定するための関数
+
+それぞれのワーカースレッドの中で独立して作成されるので、ワーカースレッド間で共有する場合には最初に作成してクローンする必要がある。  
+例: 
+```rust
+let counter = web::Data::new(AppStateWithCounter {
+    counter: Mutex::new(0),
+});
+
+HttpServer::new(move || {
+    // move counter object into the closure and clone for each worker
+    App::new()
+        .app_data(counter.clone())
+        .route("/", web::get().to(handler))
+})
+```
