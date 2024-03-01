@@ -40,3 +40,12 @@ SSHTunnelForwarder(
         for row in result:
             print(row)
 ```
+
+## commit（）とflush()について
+
+- commit()がその名の通りに変更をコミットする。
+
+- flush()はテーブルへの一時的な反映で、これがないとコミット前にselectを使用しても取得ができない。
+- rollback()で削除される。
+
+- autoflushオプションででadd()のたびにflush()される
