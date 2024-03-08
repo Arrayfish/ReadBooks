@@ -14,6 +14,8 @@ fixtureというものでモックができる？
 #### モックする時にハマりやすいポイント
 - import hoge と import されているモジュールの hoge.fuga を patch するには hoge.fuga を指定する
 - from hoge import fuga と import されている fuga を patch するには <import 文を書いている方のモジュール名>.fuga を指定する
+例) some_module.pyの中で`from another_module import another_func`と呼ばれている関数をmockした場合には
+`mock.path("some_module.another_func")`としてmockする
 
 https://qiita.com/Chanmoro/items/69f401ddbe41e818a8cf
 
