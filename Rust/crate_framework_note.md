@@ -5,6 +5,10 @@
 様々な種類のクレートを紹介するサイト  
 カテゴリごとの検索や、人気のクレートなどが見れる。
 
+## [Blessed.rs](https://blessed.rs/crates)
+
+よく使用されるクレート紹介サイト
+
 ## ユーザ認証に使えそうなクレート
 
 ### librauth
@@ -46,3 +50,7 @@ ActiveValueをプロパティに持つモデル。
 ActiveValueにはNotSet, Unchanged(val), Set(val)の3つの種類がある。
 save()ではprimarykeyがNotSetの場合にはINSERTに、それ以外の場合はUPDATEになる。
 update()ではSetのものしか更新しないので、reset()などで強制的にSetにする必要がある。
+
+## dotenvy
+
+dotenvクレートとunmaintainanceの状態になっているので、dotenvからforkされたこちらを使うのがベター

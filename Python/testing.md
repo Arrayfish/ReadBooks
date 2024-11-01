@@ -56,3 +56,44 @@ def db_session():
 
 途中で反映したい場合は`db_session.flush()`を実行すること
 
+### pytest-cov
+
+カバレッジを計測するプラグイン
+
+#### 使い方
+
+- 引数でテストを探すディレクトリを指定する
+- --covオプションに後に、カバレッジを計測するディレクトリを記入する。ファイル名は不可
+- --cov-branchオプションをつけるとC1カバレッジが計測されるようになる。
+- --cov-reportで指定したファイル形式でカバレッジを出力可能
+
+#### 結果の見方
+
+- stmt: 全部の命令文の数
+- miss: 実行していない命令文の数
+- branch: 分岐の数
+- parBran: 一部しか実行していない分岐の数
+- coverage: (stmt - miss + branch - parBran) / (stmt + branch)
+
+## uniitest
+
+### patch
+
+オブジェクトをmockに置き換えるときに使用する関数  
+デコレータとして使用するパターンとコンテキストマネージャとして使用するパターンがある。
+
+```python
+import unittest.patch
+
+@patch
+def test_function0():
+    assert true
+
+def test_function1():
+    with patch.
+        assert true
+
+
+
+```
+

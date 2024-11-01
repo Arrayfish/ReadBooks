@@ -1,5 +1,7 @@
 # rustそのものの使用についてのメモ
 
+## 
+
 ## module
 
 一般的にはクレートとして使うために下記のルートファイルでモジュールを宣言する
@@ -38,4 +40,46 @@ Rcはいわゆるスマートポインタ
 Arcは異なるスレッド間で使用することができるバージョン  
 Arcを使って可変な値の参照をとる場合はMutex<>で排他制御にする必要がある
 
-# ReCellとRcを使用した再帰のコード
+## ReCellとRcを使用した再帰のコード
+
+## enum
+
+名前なしのStructを作成する場合のみは{}を使用する。
+それ以外は()の中に型を追加する
+
+```
+enum Message {
+    Resize{width: u64, height: u64},
+    Move(Point),
+    Echo(String),
+    ChangeColor(u8, u8, u8),
+    Quit
+}
+
+```
+
+## String
+
+.to_string()とString::from()は同じ
+to_owned()は&strからStringを作成する。
+&strが.into()をするとStringになる。
+
+基本的には&strが固定値のスライスなので、値や所有者が変わる処理をするとStringになる。
+
+### 文字列の追加
+
+- format!()
+- +=で連結
+- push_str()
+
+### イテレータ
+
+イテレータに対して.as_str()を使用することで、残りの文字をstrに変換できる。
+match char = chars.next(){
+    Some(char) => char.to_uppercase.to_string() + chars.as_str()
+    None => String::new()
+}
+
+#### collect()
+
+collect関数では戻り値の型によって最適な形に変換してくれる。
