@@ -15,4 +15,4 @@
 - [The Twelve-Factor App](https://12factor.net/ja/): 一通り目を通したが、メモを書いていいない
 - [[Rust] Rustでアプリケーションを書くときのアーキテクチャなどについて考える-その１（アーキテクチャ、Domain、Usecase編](https://zenn.dev/lecto/articles/b113dbe3d0662f)
 - [chibivue](https://ubugeeei.github.io/chibivue/)  
-  Vueを作って学ぶみたいなもの
+  Vueを作って学ぶみたいなものhttps://qiita.com/aaaaaaa8888/items/51c8084c00853d36cd01
