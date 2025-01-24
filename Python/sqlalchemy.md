@@ -1,6 +1,9 @@
 # sqlalchemyについて
 
-pythonのORM
+pythonのORM  
+Coreという機能とORMという二つの書き方がある。  
+Coreはクエリビルダのような感じの機能でORMはそのままCoreの上で構築されたORMになる。  
+二つを共存させることも可能  
 
 ## 踏み台サーバ越しにsshで接続する
 

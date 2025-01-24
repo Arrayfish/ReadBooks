@@ -58,6 +58,38 @@ enum Message {
 
 ```
 
+## trait
+
+構造体でtraitによって定義された関数を実行する場合は、その構造体に加えてtrait自体もスコープに入れる必要がある。  
+
+```rust
+// speak_person.rs
+pub trait Speak {
+    fn hello(&self) -> String;
+}
+
+pub struct Person {
+    pub name: String,
+}
+
+impl Speak for Person {
+    fn hello(&self) -> String {
+        format!("Hello, I'm {}", self.name)
+    }
+}
+
+// another file
+mod speak_person;
+use speak_person::Person;
+use speak_person::Speak;
+
+fn main() {
+    let person = Person{name: "Alice".into()};
+    println!("{}",person.hello());
+}
+// Hello, I'm Alice
+```
+
 ## String
 
 .to_string()とString::from()は同じ

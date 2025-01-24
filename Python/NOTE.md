@@ -18,3 +18,7 @@ def example():
     """Docstring"""
     print('Called example function')
 ```
+
+## PYTHONPATH環境変数
+
+PYTHONPATH環境変数はPYTHONモジュールの探索パスを追加するもの。
