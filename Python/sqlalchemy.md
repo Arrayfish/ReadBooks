@@ -1,4 +1,4 @@
-# sqlalchemyについて
+# [sqlalchemy](https://www.sqlalchemy.org/)について
 
 pythonのORM  
 Coreという機能とORMという二つの書き方がある。  
@@ -52,3 +52,36 @@ SSHTunnelForwarder(
 - rollback()で削除される。
 
 - autoflushオプションででadd()のたびにflush()される
+
+## [チュートリアル](https://docs.sqlalchemy.org/en/20/tutorial/index.html)のメモ
+
+coreのconnection。"connection as you go"スタイルと"begin once"スタイル  
+基本は"begin once"スタイルの方が良い  
+
+Connection.execute()の第一引数に`:x`の形で変数を定義して、第二引数で辞書またはそのリストを渡すと代入できる
+
+リストを代入した場合はinsert文がリストの長さ分実行される。これをexecutemenyという
+
+同じことが、ORMのSessionでもできる.
+Sessionは"Commit as you go"型である
+
+MetaDataオブジェクトがアプリケーションにつき1つ存在するのが普通
+大体は、モジュールレベルの変数として定義される
+
+primary key制約とforeign key制約
+
+declarative baseという機能を使うことで、ORMで使用するmaped classとTableオブジェクトをセットで作成できる。
+
+metadataと同じようにregistryというものが、declarative base機能で生成され、Mapted class同士の連携に使用される。
+
+新しい2.0からのDeclarativeBaseはPythonの型アノテーションやdataclassに対応している。
+
+DBからTableクラスを作成するtable reflectionはskipした
+次はWorking with Dataの章
+
+Coreのインサートのやり方
+
+デフォルトでinsertした時のプライマリキーとサーバデフォルトを返す
+executeに、stmtとvalueを別々に渡すことができる。
+
+途中でselectの説明で面倒になってきた
