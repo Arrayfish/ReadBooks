@@ -84,4 +84,39 @@ Coreのインサートのやり方
 デフォルトでinsertした時のプライマリキーとサーバデフォルトを返す
 executeに、stmtとvalueを別々に渡すことができる。
 
-途中でselectの説明で面倒になってきた
+### Select
+
+テーブルのオブジェクトを使ったやり方とORMのエンティティを使った選択方法がある。
+ORMエンティティを使ったやり方の場合はデータがORMエンティティに入る。
+1レコードだけ必要な場合はexecute()の代わりにselect().first()を使う。
+```python
+user = session.scalars(select(User)).first()
+```
+
+何も考えずにselect(user_table)を実行すると、全てのカラムを取得する。
+
+ORMエンティティを使用した場合に、select()に複数のエンティティを渡し、where()で結合条件を渡すと複数のテーブルからデータを取得できる。
+
+select().join()やselect().join_from()で結合することができる。
+
+subqueryとCTE(Common Table Expression)という似たような機能がある。ORMでも使えるらしい。よくわからないがalias()を使うらしい
+
+Insert, DeleteはORMだと内部的に実行される？
+ただし、ちゃんとSessionのトランザクションに乗るので勝手にコミットされないっぽい
+unit of workパターンというものがあるらしいよくわからない。
+
+### ORM
+
+ORMのエンティティをオブジェクトとして生成すると最初はtransient状態になる。
+その後にテーブルに挿入されるとpersistent状態になる。
+セッションを閉じた後はdetached状態になる。再度属性にアクセスする時には新しいセッションを作成する必要がある。
+
+DBに未反映のInsertに関してはSession.newというプロパティで取得可能。
+
+現在のセッションの変更をDBに反映することをflushという。(トランザクションはまだコミットされていない)
+通常はautoflush機能があるので、手動でflush()を呼ぶ必要はない。
+
+DBに未反映の変更がある場合はSessionはdirty状態であり、Session.dirtyでdirty状態かどうかを確認できる。
+autoflushがONの場合は、次にDBにSELECTする時に自動的にflush()が呼ばれる。
+
+Session.get(<エンティティ>, <プライマリーキー>)でエンティティを取得できる。
