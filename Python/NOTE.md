@@ -22,3 +22,20 @@ def example():
 ## PYTHONPATH環境変数
 
 PYTHONPATH環境変数はPYTHONモジュールの探索パスを追加するもの。
+
+## クラス変数
+
+def __init__()の中で定義された変数はインスタンス変数になるが、クラス変数はクラスの中で定義された変数で、全てのインスタンスで共有される。
+
+```python
+
+class Dog:
+    kind = 'canine'         # class variable shared by all instances
+
+    def __init__(self, name):
+        self.name = name    # instance variable unique to each instance
+    
+    def get_class_variable(self):
+        return self.__class__.kind
+
+```

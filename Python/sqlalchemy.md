@@ -53,6 +53,10 @@ SSHTunnelForwarder(
 
 - autoflushオプションででadd()のたびにflush()される
 
+## datetime型について
+
+モデルで`timezone = True`を指定すると、datetime型のカラムがタイムゾーンを持つようになる。
+
 ## [チュートリアル](https://docs.sqlalchemy.org/en/20/tutorial/index.html)のメモ
 
 coreのconnection。"connection as you go"スタイルと"begin once"スタイル  

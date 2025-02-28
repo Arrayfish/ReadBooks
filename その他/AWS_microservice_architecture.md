@@ -1,0 +1,1 @@
+https://docs.aws.amazon.com/ja_jp/prescriptive-guidance/latest/cloud-design-patterns/introduction.html

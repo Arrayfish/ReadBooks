@@ -13,3 +13,8 @@ class FooBarModel(BaseModel):
     a: str
     b: dict
 ```
+
+## AwareDatetime型, NativeDatetime型
+
+Pythonのdatetime型にはタイムゾーン情報を持っているawareなdatetime型と持っていないnaiveなdatetime型がある
+Pydanticではこの二つを区別して扱うことができる
