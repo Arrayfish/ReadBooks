@@ -93,7 +93,30 @@ def test_function1():
     with patch.
         assert true
 
-
-
 ```
 
+テストで使う例: リポジトリをテスト用のリポジトリに差し替える
+
+```python
+@pytest.fixture
+def mock_repository():
+    """
+    1. テスト中で呼ばれるSomeRepositoryをモック化
+    2. MockRepositoryインスタンスを返す。
+    クラス変数で状態を持っているので、返したインスタンスを使って状態を取得/変更することができる。
+    """
+    with patch("some_feature.some_service.alcohol_interlock.SomeRepository", new_callable=lambda: MockRepository):
+        mock_instance = MockRepository()
+        yield mock_instance
+```
+
+クラスをパッチした場合に、そのreturn_valueはインスタンスになるので、そのインスタンスが返す値を設定したい場合は次の様になる
+
+```python
+@patch("app.application.service.alcohol_interlock.MccsRepository")
+def test_get_mccs(self, mock_mccs_repository):
+    mock_instance = mock_mccs_repository.return_value
+    mock_instance.get_mccs.return_value = [Mccs(id=1, name="test")]
+    result = self.service.get_mccs()
+    assert result == [Mccs(id=1, name="test")]
+```

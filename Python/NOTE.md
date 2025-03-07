@@ -39,3 +39,16 @@ class Dog:
         return self.__class__.kind
 
 ```
+
+## datetimeのタイムゾーンについて
+
+```python
+import pytz
+from datetime import datetime
+
+current_datetime = datetime.now()
+current_datetime.astimezone(pytz.timezone("Asia/Tokyo"))
+
+somedatetime = somedatetime.replace(hour=0, minute=0, second=0)
+
+owner_created_at = owner_created_at.replace(tzinfo=timezone.utc)
