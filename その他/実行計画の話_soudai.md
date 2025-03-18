@@ -6,6 +6,7 @@ MySQLとPostgreSQLとの違いなど
 相関サブクエリってなんだっけ？
 ## MySQLとPostgreSQLの違い
 ### MySQL
+
 シンプルで高速  
 更新型アーキテクチャ
 
@@ -14,7 +15,7 @@ MySQLとPostgreSQLとの違いなど
 追記型アーキテクチャ
 
 ##　参考資料
-
+[Mysqlの実行計画の話]https://nippondanji.blogspot.com/2009/03/mysqlexplain.html
 ### 全般
 
 Software DesignのMySQLとPostgreSQLの比較の回

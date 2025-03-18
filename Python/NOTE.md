@@ -42,13 +42,15 @@ class Dog:
 
 ## datetimeのタイムゾーンについて
 
-```python
-import pytz
-from datetime import datetime
+Pythonのdatetimeオブジェクトにはタイムゾーンを持たないnativeなdatetimeとタイムゾーンを持つawareなdatetimeがある。
 
-current_datetime = datetime.now()
-current_datetime.astimezone(pytz.timezone("Asia/Tokyo"))
+datetimeにタイムゾーンをつけたり、別のタイムゾーンに変換したりするのには次の関数を使う
 
-somedatetime = somedatetime.replace(hour=0, minute=0, second=0)
+astimezone(): 元々、タイムゾーン情報がついているawareなdatetimeオブジェクトを別のタイムゾーンに変更する場合
 
-owner_created_at = owner_created_at.replace(tzinfo=timezone.utc)
+pytz.timezone().localize: タイムゾーン情報がないnativeのdatetimeオブジェクトにタイムゾーン情報をつける場合
+
+nativeなdatetimeに対してastimezone()を使用すると、nativeなdatetimeのタイムゾーンがサーバのタイムゾーンだと解釈して時間の調整をするので、ローカルとサーバとでタイムゾーンが異なる場合には注意が必要。
+基本的にはnativeなdatetimeについてはastimezone()を使ってはならない
+
+replace()という直接datetimeのオブジェクトを編集する関数があるが、直接nativeなdatetimeのreplaceでpytz("Asia/Tokyo")をつけると、JSTではなく、+9:19のLMTというタイムゾーンになる。

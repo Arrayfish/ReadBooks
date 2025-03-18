@@ -48,3 +48,15 @@ class Foo(BaseModel):
         if self.a is None:
             self.a = "default"
 ```
+
+## model_dumpの内容をキャメルケースで出力する
+
+BaseModelに以下の設定を追加することで、`model_dump`メソッドの出力がキャメルケースになります。
+
+```python
+class Foo(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
+```
