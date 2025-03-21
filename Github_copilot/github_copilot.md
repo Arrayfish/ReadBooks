@@ -6,6 +6,9 @@ Githubにカスタムのインストラクションを追加することがで�
 
 [公式ドキュメント](https://docs.github.com/ja/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)
 
+しばらくは.git/info/excludeでgitから除外て調査する
+参考にしたファイルからpythonであまり使用しない表現を除外している
+
 ### プロンプトファイル
 
 目的ごとに、参照するプロンプトのファイルを分けることができる。
