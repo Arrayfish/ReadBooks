@@ -54,3 +54,37 @@ nativeなdatetimeに対してastimezone()を使用すると、nativeなdatetime�
 基本的にはnativeなdatetimeについてはastimezone()を使ってはならない
 
 replace()という直接datetimeのオブジェクトを編集する関数があるが、直接nativeなdatetimeのreplaceでpytz("Asia/Tokyo")をつけると、JSTではなく、+9:19のLMTというタイムゾーンになる。
+
+## ジェネリクス
+
+### TypeVar
+
+型ヒントシステムで使用される、型変数を定義するための機能  
+型の一貫性を保証するために使用される
+
+```python
+from typing import TypeVar
+
+T = TypeVar('T')
+
+def identity(arg: T) -> T:
+    return arg
+```
+
+### Generic
+
+ジェネリッククラスを定義するために使用する  
+クラス内で型変数を使用できるようにする  
+TypeVarと同時に使用する
+
+```python
+from typing import Generic, TypeVar
+
+T = TypeVar('T')
+
+class Container(Generic[T]):
+    def __init__(self, item: T):
+        self.item = item
+
+    def get_item(self) -> T:
+        return self.item
