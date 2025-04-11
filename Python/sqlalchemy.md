@@ -64,7 +64,7 @@ coreのconnection。"connection as you go"スタイルと"begin once"スタイ�
 
 Connection.execute()の第一引数に`:x`の形で変数を定義して、第二引数で辞書またはそのリストを渡すと代入できる
 
-リストを代入した場合はinsert文がリストの長さ分実行される。これをexecutemenyという
+リストを代入した場合はinsert文がリストの長さ分実行される。これをexecutemanyという
 
 同じことが、ORMのSessionでもできる.
 Sessionは"Commit as you go"型である
@@ -93,6 +93,7 @@ executeに、stmtとvalueを別々に渡すことができる。
 テーブルのオブジェクトを使ったやり方とORMのエンティティを使った選択方法がある。
 ORMエンティティを使ったやり方の場合はデータがORMエンティティに入る。
 1レコードだけ必要な場合はexecute()の代わりにselect().first()を使う。
+
 ```python
 user = session.scalars(select(User)).first()
 ```
@@ -129,4 +130,72 @@ relashonship()でリレーションを作成した時に、普通だrelationship
 これを遅延ロードという。
 
 ただし、これはN+1問題を引き起こす可能性があるので、色々と他のロード方法がある。
-詳しくは後で書く
+
+#### ローダ戦略
+
+ローダ戦略は`Select.options()`でSELECTステートメントに関連づけることができる  
+
+```python
+for user_obj in session.execute(
+    select(User).options(selectinload(User.addresses))
+).scalars():
+    user_obj.addresses
+```
+
+また、モデルに対して`relationship()`でデフォルトを指定することもできる  
+
+```python
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import relationship
+
+class User(Base):
+    __tablename__ = "user_accout"
+
+    addresses: Mapped[List["Address"]] = relationship(
+        back_populates="user", lazy="selectin"
+    )
+```
+
+##### selectinload()
+
+一番便利なロード方法  
+モデルに紐づく特定の種類のモデルを一緒に取得することができる。  
+JOINやサブクエリなどを使用するのではなく、単純にモデルごとにSELECTを発行する。  
+
+##### joinedload()
+
+SELECT文にJOINを追加して、関連するモデルを一緒に取得する。  
+多対一の関連オブジェクトをロー路するときに最適
+インナージョインを指定することもできる  
+一対多に指定すると、JOINの挙動的にデータ量が多の方の行数だけ増加するので注意  
+where()やorder_by()はJOINする方のテーブルの項目は指定できないので、注意  
+
+```python
+from sqlalchemy.orm import joinedload
+stmt = (
+    select(Address)
+    .options(joinedload(Address.user, innerjoin=True))
+    .order_by(Address.id)
+)
+```
+
+##### 明示的なJOIN + 早期ロード
+
+自分でJOINを指定して、早期ロードする方法
+
+```python
+from sqlalchemy.orm import contains_eager
+stmt = (
+    select(Address)
+    .join(Address.user)
+    .where(User.name == "pkrabs")
+    .options(contains_eager(Address.user))
+    .order_by(Address.id)
+)
+
+```
+
+##### raseload()
+
+遅延ロードとなる操作をエラーとすることでN+1問題を完全に防ぐことができる。
+`raiseload.sql_only`オプションを使用することで、
