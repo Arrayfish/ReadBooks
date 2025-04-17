@@ -2,7 +2,8 @@
 
 ## copilot instructions
 
-Githubにカスタムのインストラクションを追加することができる機能
+Githubにカスタムのインストラクションを追加することができる機能  
+.github/copilot-instructions.mdにあるファイルを参照して、カスタムインストラクションを作成することができる。
 
 [公式ドキュメント](https://docs.github.com/ja/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)
 
@@ -11,8 +12,10 @@ Githubにカスタムのインストラクションを追加することがで�
 
 ### プロンプトファイル
 
-目的ごとに、参照するプロンプトのファイルを分けることができる。
-clineに全部賭けろの人のプロンプトファイルを参考に作るといいかも
+`.github/prompts`ディレクトリに、フィル名が`*.prompt.md`のファイルを追加する。  
+目的ごとに、参照するプロンプトのファイルを分けることができる。  
+vscodeで使用するときは明示的に指定する必要がある。
+
 
 ## Agentモードメモ
 
