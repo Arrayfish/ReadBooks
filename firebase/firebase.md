@@ -1,0 +1,9 @@
+# firebase
+
+## firebase プロジェクト
+
+- firebaseプロジェクトは最上位のエンティティ
+- firebaseプロジェクトには1つ以上のfirebaseアプリを登録可能
+- firebaseプルジェクトに登録されているアプリはそのfirebaseプロジェクトにプロビジョニングされた全てのリソースとサービスにアクセス可能
+- firebaseプロジェクトを作成したときには実際にはGoogle Cloud プロジェクトが作成されている
+- firebaseプロジェクトはFirebase機能が有効になっているGoogle Cloud プロジェクトと言える

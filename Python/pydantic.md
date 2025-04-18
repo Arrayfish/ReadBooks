@@ -51,12 +51,29 @@ class Foo(BaseModel):
 
 ## model_dumpの内容をキャメルケースで出力する
 
-BaseModelに以下の設定を追加することで、`model_dump`メソッドの出力がキャメルケースになります。
+BaseModelに以下の設定を追加することで、入力するときにキャメルケースで入力できるようになる。  
+`model_dump(by_alias=True)`を指定することで、エイリアス名で出力されます。
+
 
 ```python
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 class Foo(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel,
         populate_by_name=True
     )
+```
+
+## クラス変数を定義する
+
+typingの`ClassVar`を使用することで、クラス変数を定義することができる。
+```python
+from typing import ClassVar
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: int
+    name: str
+    TYPE: ClassVar[str] = "user"  # これはインスタンスのフィールドになりません
 ```
