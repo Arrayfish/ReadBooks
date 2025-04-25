@@ -1,15 +1,49 @@
-## Python
+# Python
 
 Pythonでのコーディングにおける一般的なベストプラクティスをまとめます。
 
-### 方針
+## 重要
+
+pythonのパッケージマネージャとしてpipenvを使用しています。
+コマンドを実行する前には`source ./scripts/set_root_env.sh`を実行してshellに環境変数を追加
+
+## テストの書き方
+
+pytest を使う。とくに実装上の理由がない限り、classによる入れ子はしない。  
+テストの関数名は、`test_` で始める。
+テストの場所は、tests/以下のそのモジュールと同じ階層に置く。  
+例えば、`app/` 以下に `app/foo/bar.py` がある場合、テストは `tests/app/foo/test_bar.py` に置く。
+テストではconftest.pyに便利なfixtureが存在するので、それを使用してください。
+DBを使うテストの場合はdb_sessionフィクスチャーでsqlalchemyのセッションが入手可能
+DBに新しくデータを作る必要がある場合はsqlalchemyyのエンティティにサンプル生成関数を使用しろ。
+テストを実行するときは実行範囲を指定しろ
+sqlalchemy.exc.InvalidRequestError で、ReservationDetailが出る場合はテストファイルにReservationDetailをインポートしてくだささい。
+
+
+```python
+def test_2_add_3_is_5():
+  """2+3は5となる"""
+  assert add(2, 3) == 5
+```
+
+アサーションの書き方
+
+- `assert a == b` で可能な限り期待する動作を書く
+
+## テストの実行方法
+
+`pipenv run pytest <args>`
+
+## Pythonでのコーディングにおける一般的なベストプラクティスをまとめます。
+
+## 方針
 
 - 最初に型と、それを処理する関数のインターフェースを考える
 - コードのコメントとして、そのファイルがどういう仕様化を可能な限り明記する
 - 実装が内部状態を持たないとき、 class による実装を避けて関数を優先する
 - 副作用を抽象するために、アダプタパターンで外部依存を抽象し、テストではインメモリなアダプタで処理する
 
-### 型の使用方針
+## 型の使用方針
 
 1. 具体的な型を使用
    - Any の使用を避ける
@@ -17,7 +51,7 @@ Pythonでのコーディングにおける一般的なベストプラクティ�
    - 型アノテーションを積極的に利用
    - mypy で型チェックを行う
 
-### エラー処理
+## エラー処理
 
 1. エラー型の定義
    - 具体的なケースを列挙
@@ -28,7 +62,7 @@ Pythonでのコーディングにおける一般的なベストプラクティ�
    - エラーを適切にハンドリングするメカニズムを導入
    - ログにエラー情報を記録する
 
-### 実装パターン
+## 実装パターン
 
 1. 関数ベース（状態を持たない場合）
 
@@ -61,7 +95,7 @@ Pythonでのコーディングにおける一般的なベストプラクティ�
    class TimeBasedCache(Cache):
        def __init__(self, ttl_ms: int) -> None:
            self.ttl_ms = ttl_ms
-           self.items: dict[str, tuple[T, int]] = {}
+           self.items: Dict[str, Tuple[T, int]] = {}
 
        def get(self, key: str) -> T | None:
            item = self.items.get(key)
@@ -76,7 +110,7 @@ Pythonでのコーディングにおける一般的なベストプラクティ�
 3. Adapterパターン（外部依存の抽象化）
 
   ```python
-  from typing import Callable, TypeVar, Generic, Any
+  from typing import Callable, TypeVar, Generic, Union, Dict, Any
   import aiohttp
   import asyncio
 
@@ -84,7 +118,7 @@ Pythonでのコーディングにおける一般的なベストプラクティ�
   T = TypeVar('T')
 
   class Result(Generic[T]):
-      def __init__(self, value: T | None, error: dict[str, Any] | None):
+      def __init__(self, value: Union[T, None], error: Union[Dict[str, Any], None]):
           self.value = value
           self.error = error
 
@@ -93,14 +127,14 @@ Pythonでのコーディングにおける一般的なベストプラクティ�
           return Result(value=value, error=None)
 
       @staticmethod
-      def err(error: dict[str, Any]) -> 'Result[T]':
+      def err(error: Dict[str, Any]) -> 'Result[T]':
           return Result(value=None, error=error)
 
   # Fetcher型
   Fetcher = Callable[[str], asyncio.Future]
 
   # 実装
-  def create_fetcher(headers: dict[str, str]) -> Fetcher:
+  def create_fetcher(headers: Dict[str, str]) -> Fetcher:
       async def fetcher(path: str) -> Result:
           try:
               async with aiohttp.ClientSession(headers=headers) as session:

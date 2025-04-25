@@ -33,8 +33,9 @@ class Foo(BaseModel):
 ## default
 
 `default`を使用することで、デフォルト値を設定することができる。  
-デフォルト値が入力されるのはバリデーションが終わった後なので、`@field_validator`などでデフォルト値を参照、変更することはできない。  
-その代わりに`model_post_init`メソッドをオーバーライドして、初期化処理を行うことができます。
+デフォルト値が入力されるのはインスタンス時なので`@model_validator`などでデフォルト値を参照、変更することができる。
+ただし、frozen=Trueの時は`model_validator`で変更できない。
+そのほかに`model_post_init`を使用することで、インスタンス化後にデフォルト値を変更することができる。
 
 ```python
 class Foo(BaseModel):
