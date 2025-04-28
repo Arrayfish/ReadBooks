@@ -33,8 +33,9 @@ class Foo(BaseModel):
 ## default
 
 `default`を使用することで、デフォルト値を設定することができる。  
-デフォルト値が入力されるのはバリデーションが終わった後なので、`@field_validator`などでデフォルト値を参照、変更することはできない。  
-その代わりに`model_post_init`メソッドをオーバーライドして、初期化処理を行うことができます。
+デフォルト値が入力されるのはインスタンス時なので`@model_validator`などでデフォルト値を参照、変更することができる。
+ただし、frozen=Trueの時は`model_validator`で変更できない。
+そのほかに`model_post_init`を使用することで、インスタンス化後にデフォルト値を変更することができる。
 
 ```python
 class Foo(BaseModel):
@@ -51,12 +52,29 @@ class Foo(BaseModel):
 
 ## model_dumpの内容をキャメルケースで出力する
 
-BaseModelに以下の設定を追加することで、`model_dump`メソッドの出力がキャメルケースになります。
+BaseModelに以下の設定を追加することで、入力するときにキャメルケースで入力できるようになる。  
+`model_dump(by_alias=True)`を指定することで、エイリアス名で出力されます。
+
 
 ```python
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 class Foo(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel,
         populate_by_name=True
     )
+```
+
+## クラス変数を定義する
+
+typingの`ClassVar`を使用することで、クラス変数を定義することができる。
+```python
+from typing import ClassVar
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: int
+    name: str
+    TYPE: ClassVar[str] = "user"  # これはインスタンスのフィールドになりません
 ```

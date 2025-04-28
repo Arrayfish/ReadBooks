@@ -40,17 +40,28 @@ actix_web::Appの.wrap()に入れて使う。ミドルウェア？
 
 ## SeaORM
 
+詳しくはディレクトリを参照
+
 - 非同期に最初から対応したORMマッパー
 - sqlxを使用している。
 - cliでテーブル定義からmodel(エンティティ)を生成できる
-- cliでActiveレコードのようにテーブルに対応するモデル毎にメソッドが自動で提供される。
-
-### ActiveModel
-ActiveValueをプロパティに持つモデル。
-ActiveValueにはNotSet, Unchanged(val), Set(val)の3つの種類がある。
-save()ではprimarykeyがNotSetの場合にはINSERTに、それ以外の場合はUPDATEになる。
-update()ではSetのものしか更新しないので、reset()などで強制的にSetにする必要がある。
+- cliでアクティブレコードのようにテーブルに対応するモデル毎にメソッドが自動で提供される。
 
 ## dotenvy
 
 dotenvクレートとunmaintainanceの状態になっているので、dotenvからforkされたこちらを使うのがベター
+
+## [anyhow](https://docs.rs/anyhow/latest/anyhow/)
+
+エラー処理を簡単にするためのクレート
+
+関数の戻り値の型を`Result<T, anyhow::Error>`か同じ意味の`anyhow::Result<T>`にすることで、どんなエラーでも返せるようになる。  
+失敗しうる関数(Result型を返す)を呼び出す時に最後に?をつけることで、エラーをそのまま返すことができる。  
+
+`use anyhow::Context`を使用して、関数に`.context("Some Error Message")`をつけることで、エラーの内容を追加することができる。
+
+`anyhow::bail!("Error message")`マクロで早期にエラーを返すことができる。
+
+## [thiserror](https://docs.rs/thiserror/latest/thiserror/)
+
+rustの標準ライブラリのエラー`std::error::Error`に対する便利なマクロを提供するクレート
