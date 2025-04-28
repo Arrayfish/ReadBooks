@@ -21,6 +21,18 @@ Pythonのドキュメント生成ライブラリ
 読み込む時にモジュールをロードするので、ファイル直で書かれているコードは実行されてしまう。  
 autodoc2という改良版のサードパーティプラグインがあるらしい
 
+#### autoclass
+
+クラスのドキュメントを表示する。基本的にはdocstringが書かれている関数や変数のみが表示される。
+表示順をコントロールすることが出来る。
+
+```markdown
+.. autoclass:: モジュール名.クラス名
+    :members:
+    :undoc-members: # メンバーの説明がないものも表示する
+    :member-order: bysource # メンバーの表示順をソースコードの順にする
+```
+
 ### [myst](https://qiita.com/Tachy_Pochy/items/53866eea43d0ad93ea1d)
 
 Sphinxで使用することができるmarkdownの方言  

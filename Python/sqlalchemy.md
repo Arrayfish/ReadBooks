@@ -55,7 +55,8 @@ SSHTunnelForwarder(
 
 ## datetime型について
 
-モデルで`timezone = True`を指定すると、datetime型のカラムがタイムゾーンを持つようになる。
+モデルで`timezone = True`を指定すると、datetime型のカラムがタイムゾーンを持つようになる。  
+ただし、データベースの型によってはタイムゾーン情報を保持しない場合がある。(MySQLのDATETIME型など)
 
 ## [チュートリアル](https://docs.sqlalchemy.org/en/20/tutorial/index.html)のメモ
 
