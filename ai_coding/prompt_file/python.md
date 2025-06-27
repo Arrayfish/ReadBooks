@@ -1,23 +1,14 @@
-# Python
 
-Pythonでのコーディングにおける一般的なベストプラクティスをまとめます。
-
-## 重要
-
-pythonのパッケージマネージャとしてpipenvを使用しています。
-コマンドを実行する前には`source ./scripts/set_root_env.sh`を実行してshellに環境変数を追加
+# Pythonのコーディングプラクティス
 
 ## テストの書き方
 
-pytest を使う。とくに実装上の理由がない限り、classによる入れ子はしない。  
+pytest を使う。とくに実装上の理由がない限り、classによる入れ子はしない。
 テストの関数名は、`test_` で始める。
-テストの場所は、tests/以下のそのモジュールと同じ階層に置く。  
+テストの場所は、tests/以下のそのモジュールと同じ階層に置く。
 例えば、`app/` 以下に `app/foo/bar.py` がある場合、テストは `tests/app/foo/test_bar.py` に置く。
-テストではconftest.pyに便利なfixtureが存在するので、それを使用してください。
+例外的にAPI呼び出しを行う結合テストを作成する場合は`tests/app/API`以下にファイルを作成する
 DBを使うテストの場合はdb_sessionフィクスチャーでsqlalchemyのセッションが入手可能
-DBに新しくデータを作る必要がある場合はsqlalchemyyのエンティティにサンプル生成関数を使用しろ。
-テストを実行するときは実行範囲を指定しろ
-sqlalchemy.exc.InvalidRequestError で、ReservationDetailが出る場合はテストファイルにReservationDetailをインポートしてくだささい。
 
 
 ```python
@@ -68,8 +59,8 @@ def test_2_add_3_is_5():
 
    ```python
    # インターフェース
-   from typing import Protocol   
-   import datetime  
+   from typing import Protocol
+   import datetime
 
    class Logger(Protocol):
        def log(self, message: str) -> None:

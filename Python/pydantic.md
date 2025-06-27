@@ -54,6 +54,7 @@ class Foo(BaseModel):
 
 BaseModelに以下の設定を追加することで、入力するときにキャメルケースで入力できるようになる。  
 `model_dump(by_alias=True)`を指定することで、エイリアス名で出力されます。
+`model_dump(mode="json")`を指定することで、UUIDやdatetimeなどの型もJSONにできる形に変換されます。
 
 
 ```python
