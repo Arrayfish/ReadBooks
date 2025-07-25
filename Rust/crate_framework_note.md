@@ -55,7 +55,7 @@ dotenvクレートとunmaintainanceの状態になっているので、dotenvか
 
 エラー処理を簡単にするためのクレート
 
-関数の戻り値の型を`Result<T, anyhow::Error>`か同じ意味の`anyhow::Result<T>`にすることで、どんなエラーでも返せるようになる。  
+関数の戻り値の型を`Result<T, anyhow::Error>`か同じ意味の`anyhow::Result<T>`にすることで、std::error::Errorトレートを実装しているどんなエラーでも返せるようになる。  
 失敗しうる関数(Result型を返す)を呼び出す時に最後に?をつけることで、エラーをそのまま返すことができる。  
 
 `use anyhow::Context`を使用して、関数に`.context("Some Error Message")`をつけることで、エラーの内容を追加することができる。
@@ -65,3 +65,17 @@ dotenvクレートとunmaintainanceの状態になっているので、dotenvか
 ## [thiserror](https://docs.rs/thiserror/latest/thiserror/)
 
 rustの標準ライブラリのエラー`std::error::Error`に対する便利なマクロを提供するクレート
+
+エラーのenumを作成する際に、`#[derive(thiserror::Error)]`をつけることで、エラーの型を簡単に作成できる。
+例
+
+```rust
+use thiserror::Error;
+#[derive(Error, Debug)]
+pub enum MyError {
+    #[error("An error occurred: {0}")]
+    SomeError(String),
+    #[error("Another error occurred")]
+    AnotherError,
+}
+```
