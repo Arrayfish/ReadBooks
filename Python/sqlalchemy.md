@@ -58,6 +58,14 @@ SSHTunnelForwarder(
 モデルで`timezone = True`を指定すると、datetime型のカラムがタイムゾーンを持つようになる。  
 ただし、データベースの型によってはタイムゾーン情報を保持しない場合がある。(MySQLのDATETIME型など)
 
+## SQL出力
+
+SQLAlchemyのクエリビルダで生成されたSQLを確認するには、`compile()`メソッドを使用します。
+
+```python
+stmt.compile(compile_kwargs={'literal_binds': True})
+```
+
 ## [チュートリアル](https://docs.sqlalchemy.org/en/20/tutorial/index.html)のメモ
 
 coreのconnection。"connection as you go"スタイルと"begin once"スタイル  

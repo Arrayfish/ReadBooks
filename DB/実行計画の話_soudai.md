@@ -10,6 +10,8 @@ MySQLとPostgreSQLとの違いなど
 
 最近はEXPLAIN ANALYZEコマンドも一緒に使うことが多い
 
+[MySQLのEXPLAIN ANALYZEの読み方を勉強したよ](https://qiita.com/Nyokki/items/c2d95cb2a75d3c0acb64)
+
 ## MySQLとPostgreSQLの違い
 
 ### MySQL
