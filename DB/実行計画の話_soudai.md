@@ -12,6 +12,8 @@ MySQLとPostgreSQLとの違いなど
 
 [MySQLのEXPLAIN ANALYZEの読み方を勉強したよ](https://qiita.com/Nyokki/items/c2d95cb2a75d3c0acb64)
 
+loopsがあるときはactual_time*loopsで実際の時間を計算する
+
 ## MySQLとPostgreSQLの違い
 
 ### MySQL
