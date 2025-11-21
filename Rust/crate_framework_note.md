@@ -35,6 +35,7 @@ tokioなどの非同期システムで使う
 actix_web::Appの.wrap()に入れて使う。ミドルウェア？
 
 ## utopia
+
 - OpenAPIをマクロの記述から生成する。  
 - 実際にURLからswaggerを見るにはutopia-swagger-uiクレートを使う。
 
@@ -79,3 +80,8 @@ pub enum MyError {
     AnotherError,
 }
 ```
+
+## [confy](https://docs.rs/confy/latest/confy/index.html)
+
+設定ファイルの読み書きをするためのクレート
+他のクレートと比べてシンプルな構成

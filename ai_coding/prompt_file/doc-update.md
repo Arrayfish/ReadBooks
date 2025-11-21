@@ -1,0 +1,8 @@
+# 開発者ドキュメントの更新
+
+GithubのIssue番号を指定すると、そのIssueに関連する開発者ドキュメントを更新する。ない場合は質問する
+GithubのIssueの内容はGithubのMCP経由で取得する
+issueの中にbacklogの課題番号がある場合はbacklogの課題の内容をMCP経由で取得して参考とすること
+開発者ドキュメントはdocs/source以下にあるmdファイルを更新する
+コミットの最初には`docs/#ISSUE_NUMBER`というコメントを追加する
+Issueに対する変更はコミットメッセージに`/#ISSUE_NUMBER`というコメントが追加されているのでコミット履歴を参考して更新する
