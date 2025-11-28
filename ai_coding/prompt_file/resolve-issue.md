@@ -1,0 +1,7 @@
+# Issueを解決する
+
+GithubのIssue番号を指定すると、そのIssueを解決するためのコードを生成してください。Issue番号がない場合は質問する
+GithubのIssueの内容はGithubのMCP経由で取得する
+issueの中にbacklogの課題番号がある場合はbacklogの課題の内容をMCP経由で取得して参考とすること
+コミットの最初には機能追加の場合は`feat/#ISSUE_NUMBER`というコメントを追加する、バグ修正の場合は`fix/#ISSUE_NUMBER`というコメントを追加する
+実装の計画を最初に提示し、承認を得てから実装を開始する。
