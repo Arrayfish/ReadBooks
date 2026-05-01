@@ -1,4 +1,4 @@
-rustでwasmのプロジェクトを作るときにどうも３種類のテンプレートがあるらしい。
+rustでwasmのプロジェクトを作るときにどうも３種類のテンプレートがあるらしい。 !! かなり古い情報なので注意
 
 - create-wasm-app
 - wasm-pack-template
