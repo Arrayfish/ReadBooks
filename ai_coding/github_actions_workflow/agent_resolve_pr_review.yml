@@ -1,0 +1,226 @@
+name: PR Review Regenerate
+
+on:
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  regenerate:
+    # changes_requested のレビューが付いた、かつ agent が作成したブランチの場合のみ実行
+    if: >-
+      github.event.review.state == 'changes_requested'
+      && startsWith(github.event.pull_request.head.ref, 'issue-')
+    runs-on: [self-hosted, linux, x64, desktop]
+    container:
+      image: node:26
+    concurrency:
+      group: pr-regenerate-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Install GitHub CLI
+        run: |
+          set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gh ca-certificates
+
+      - name: Configure git
+        run: |
+          set -euo pipefail
+          CONTAINER_WORKSPACE="/__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}"
+          git config --global --add safe.directory "${CONTAINER_WORKSPACE}"
+          git config --global --add safe.directory "${{ github.workspace }}"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install Cursor CLI
+        run: |
+          set -euo pipefail
+          export HOME=/root
+          curl https://cursor.com/install -fsS | bash
+          echo "/root/.local/bin" >> "${GITHUB_PATH}"
+
+      - name: Prepare regeneration context
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REVIEW_ID: ${{ github.event.review.id }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const { execFileSync } = require('child_process');
+
+          const prNumber = process.env.PR_NUMBER;
+          const reviewId = Number(process.env.REVIEW_ID);
+          const reviewBody = process.env.REVIEW_BODY ?? '';
+          const headRef = process.env.HEAD_REF;
+          const repo = process.env.GITHUB_REPOSITORY;
+
+          // ブランチ名から Issue 番号を抽出
+          const issueNumber = headRef.replace('issue-', '');
+          fs.writeFileSync('/tmp/issue_number.txt', issueNumber);
+          fs.writeFileSync('/tmp/pr_number.txt', prNumber);
+
+          // 今回の changes_requested レビューに紐づくインラインコメントのみ取得
+          let inlineReviewComments = '';
+          try {
+            inlineReviewComments = execFileSync(
+              'gh',
+              [
+                'api',
+                `repos/${repo}/pulls/${prNumber}/comments`,
+                '--jq',
+                `.[] | select(.pull_request_review_id == ${reviewId}) | "[\\(.path):\\(.line // .original_line // \\"general\\")] \\(.user.login): \\(.body)"`,
+              ],
+              { encoding: 'utf8', env: process.env },
+            ).trim();
+          } catch {
+            // インラインコメントがない場合は空
+          }
+
+          // Issue の本文を取得
+          let issueBody = '';
+          try {
+            issueBody = execFileSync(
+              'gh',
+              ['issue', 'view', issueNumber, '--json', 'body', '--jq', '.body'],
+              { encoding: 'utf8', env: process.env },
+            ).trim();
+          } catch {
+            // 取得できない場合は空
+          }
+
+          fs.writeFileSync('/tmp/agent_prompt.txt', [
+            '以下の GitHub Issue に書かれた指示に従い、このリポジトリのコードを修正してください。',
+            'また、PR レビューで指摘された内容を反映してください。',
+            '',
+            `Issue #${issueNumber}:`,
+            issueBody,
+            '',
+            `PR #${prNumber} のレビュー概要:`,
+            reviewBody,
+            '',
+            inlineReviewComments ? `インライン review コメント（今回のレビュー）:\n${inlineReviewComments}` : '',
+            '',
+            '要件:',
+            '- レビューの指摘事項を修正する',
+            '- Issue の指示どおりに必要なファイルを編集する',
+            '- 変更は最小限にし、既存のコーディング規約に従う',
+            '- 情報が不足していたり判断が難しい場合は、コード変更を行わず /tmp/need_help.txt に質問内容を日本語で書き出すこと',
+          ].filter(Boolean).join('\n'));
+          NODE
+
+      - name: Apply code changes from review feedback
+        id: apply_agent
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_TOKEN }}
+        run: |
+          set -euo pipefail
+          agent -p --force "$(cat /tmp/agent_prompt.txt)"
+
+      - name: Ask for help if needed
+        id: need_help
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -f /tmp/need_help.txt ]; then
+            ISSUE_NUMBER="$(cat /tmp/issue_number.txt)"
+            QUESTION="$(cat /tmp/need_help.txt)"
+            printf "@some-user 情報が不足しているため確認させてください。\n\n%s" "${QUESTION}" > /tmp/help_comment.md
+            gh issue comment "${ISSUE_NUMBER}" --body-file /tmp/help_comment.md
+            echo "::error::Agent が追加情報を必要としています。Issue に質問を投稿しました。"
+            exit 1
+          fi
+
+      - name: Push updated changes
+        id: push_changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const { execFileSync } = require('child_process');
+          const fs = require('fs');
+
+          const prNumber = process.env.PR_NUMBER;
+          const headRef = process.env.HEAD_REF;
+          const issueNumber = fs.readFileSync('/tmp/issue_number.txt', 'utf8').trim();
+
+          const gh = (...args) => {
+            execFileSync('gh', args, { stdio: 'inherit', env: process.env });
+          };
+
+          const commentOnIssue = (body) => {
+            fs.writeFileSync('/tmp/issue_comment.md', body);
+            gh('issue', 'comment', issueNumber, '--body-file', '/tmp/issue_comment.md');
+          };
+
+          execFileSync('git', ['add', '-A'], { stdio: 'inherit' });
+          try {
+            execFileSync('git', ['diff', '--staged', '--quiet'], { stdio: 'inherit' });
+            gh('pr', 'comment', prNumber, '--body', 'レビュー指摘に対するコード変更はありませんでした。指摘内容を確認してください。');
+            console.error('::error::レビュー指摘に対するコード変更はありませんでした。');
+            process.exit(1);
+          } catch {
+            // staged changes exist
+          }
+
+          execFileSync(
+            'git',
+            ['commit', '-m', `fix: address review feedback for PR #${prNumber}`],
+            { stdio: 'inherit' },
+          );
+          execFileSync('git', ['push', 'origin', headRef], { stdio: 'inherit' });
+
+          gh('pr', 'comment', prNumber, '--body', 'レビュー指摘を反映したコミットをプッシュしました。再度ご確認ください。');
+          commentOnIssue(`PR #${prNumber} のレビュー指摘を反映しました。`);
+          NODE
+
+      - name: Determine failure reason
+        if: failure()
+        id: failure_reason
+        run: |
+          REASON="不明なエラー"
+          if [ "${{ steps.need_help.outcome }}" = "failure" ]; then
+            REASON="追加情報が必要です"
+          elif [ "${{ steps.push_changes.outcome }}" = "failure" ]; then
+            REASON="コード変更がありませんでした"
+          elif [ "${{ steps.apply_agent.outcome }}" = "failure" ]; then
+            REASON="Agent の実行に失敗しました"
+          fi
+          echo "reason=${REASON}" >> "${GITHUB_OUTPUT}"
+
+      - name: Notify Slack on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "*PR Review Regenerate*: 失敗（${{ steps.failure_reason.outputs.reason }}）\nPR: ${{ github.event.pull_request.html_url }}\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            blocks:
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "GitHub Action *PR Review Regenerate* が失敗しました。\n理由: ${{ steps.failure_reason.outputs.reason }}\nPR: ${{ github.event.pull_request.html_url }}\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
