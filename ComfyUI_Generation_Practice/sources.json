@@ -1,0 +1,29 @@
+{
+  "copied_at": "2026-10-01T08:32:04.030721+09:00",
+  "files": [
+    {
+      "topic": "SDXL",
+      "source_wsl": "/mnt/c/Users/uekus/Documents/comfyui/user/default/workflows/SDXL_learning_pack/README.md",
+      "source_windows": "C:\\Users\\uekus\\Documents\\comfyui\\user\\default\\workflows\\SDXL_learning_pack\\README.md",
+      "copy": "SDXL/README.md",
+      "sha256": "d3fc3357d89bed747fdc392234ee3c9d5e830862f60cde343a320b47beb37371",
+      "bytes": 2219
+    },
+    {
+      "topic": "Z-Image",
+      "source_wsl": "/mnt/c/Users/uekus/Documents/comfyui/user/default/workflows/Z_Image_learning_pack/README.md",
+      "source_windows": "C:\\Users\\uekus\\Documents\\comfyui\\user\\default\\workflows\\Z_Image_learning_pack\\README.md",
+      "copy": "Z-Image/README.md",
+      "sha256": "cbfbb725f92f57447a65ddd01ba3df93c9b33afd1f61d157d0d5cc9eb35e1432",
+      "bytes": 2680
+    },
+    {
+      "topic": "MiniMax-H3",
+      "source_wsl": "/mnt/c/Users/uekus/Documents/comfyui-h3/README.md",
+      "source_windows": "C:\\Users\\uekus\\Documents\\comfyui-h3\\README.md",
+      "copy": "MiniMax-H3/README.md",
+      "sha256": "75a4377558f4fbe5de953e27f88a15ad70aee7f44dcca8b496635ac1702c23ba",
+      "bytes": 82015
+    }
+  ]
+}
